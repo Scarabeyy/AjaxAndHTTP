@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+    /*Задание1 
+    Разработайте страницу с 2 полями ввода и кнопкой
+    Пользователь должен вводить в поля вводов
+    целочисленные значения, а нажатие по кнопке
+    должно приводить к асинхронному запросу
+    на сервер. Запрашивать следует обработчик 
+    СalcHandler.ashx, который находиться вместе с 
+    примерами в уроке номер 10, обработчик принимает
+    2 Post параметра с именами "a" и "b"
+    Результат который возвращает обработчик выведите на страницу.
+    */
+    </script>
+    <script>
+        window.onload = function(){
+            var aValue = document.getElementById("a");
+            var bValue = document.getElementById("b");
+            var pattern = /\d/;
+
+            aValue.addEventListener("keypress",function(e){
+                var str = String.fromCharCode(e.charCode);
+                if(!pattern.test(str)){
+                    e.preventDefault();
+                }
+            })
+            bValue.addEventListener("keypress",function(e){
+                var str = String.fromCharCode(e.charCode);
+                if(!pattern.test(str)){
+                    e.preventDefault();
+                }
+            })
+
+            var xhr = new XMLHttpRequest();
+
+            var sendBtn = document.getElementById("sendBtn");
+            sendBtn.addEventListener("click",function(){
+                
+                var a = parseFloat(aValue.value);
+                var b = parseFloat(bValue.value);
+
+                xhr.open("POST", "CalcHandler.ashx");
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                        document.getElementById("output").innerHTML = "POST" + xhr.responseText;
+                    }
+                }
+            xhr.send("a="+a+"&b="+b);
+            })
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="a">
+    <input type="text" id="b">
+</br>
+    <input type="button" id="sendBtn" value="Send all">
+    <p id="output"></p>
+</body>
+</html>
